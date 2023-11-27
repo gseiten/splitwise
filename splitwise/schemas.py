@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from enum import Enum
-from typing import List
+from typing import List, Optional, Dict
 
 
 class SplitType(str, Enum):
@@ -15,12 +15,14 @@ class UserCreate(BaseModel):
     mobile_number: str
 
 
-class ExpenseCreate(BaseModel):
+class ExpenseSplitCreate(BaseModel):
     amount: float
     description: str
     payer_id: int
     split_type: SplitType
-    participants: List[int] = Field(..., title="List of participant IDs")
+    participants: List[int]  # For all split types
+    exact_amounts: Optional[Dict[int, float]] = None  # For EXACT split type
+    percentages: Optional[Dict[int, float]] = None  # For PERCENTAGE split type
 
 
 class ExpenseParticipantCreate(BaseModel):
